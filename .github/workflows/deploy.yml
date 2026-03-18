@@ -23,6 +23,7 @@ jobs:
       - name: Run unit tests
         run: pytest tests/unit -v --tb=short
         env:
+          PYTHONPATH: .
           AZURE_OPENAI_API_KEY: "mock"
           AZURE_OPENAI_ENDPOINT: "https://mock.openai.azure.com"
           AZURE_SEARCH_ENDPOINT: "https://mock.search.windows.net"
