@@ -1,0 +1,16 @@
+Invoice ID,Vendor,Amount USD,Category,Department,Submission Date,Status,Approver,Notes
+INV-2025-001,Microsoft Corporation,24000.00,Software Licenses,Engineering,2025-01-05,Approved,CFO,Annual Azure subscription renewal
+INV-2025-002,WeWork,8500.00,Office Space,Facilities,2025-01-07,Approved,Finance Director,Co-working space — NYC satellite office
+INV-2025-003,Delta Air Lines,1250.00,Travel,Sales,2025-01-10,Approved,Auto,Customer site visit — Chicago
+INV-2025-004,OpenAI,3200.00,Software,Engineering,2025-01-12,Approved,Manager,API credits for AI development
+INV-2025-005,AWS,15750.00,Cloud Infrastructure,Engineering,2025-01-15,Approved,CFO,EC2 + S3 + RDS monthly bill
+INV-2025-006,Salesforce,42000.00,CRM Software,Sales,2025-01-18,Pending CFO,CFO,Annual CRM license — 50 seats
+INV-2025-007,LinkedIn,5000.00,Recruiting,HR,2025-01-20,Approved,Finance Director,Job posting credits
+INV-2025-008,FedEx,340.00,Shipping,Operations,2025-01-22,Approved,Auto,Office supplies delivery
+INV-2025-009,Zoom,1800.00,Communication Tools,IT,2025-01-25,Approved,Manager,Enterprise plan renewal — 100 seats
+INV-2025-010,Deloitte,85000.00,Professional Services,Finance,2025-01-28,Pending Board,Board,Q4 audit and compliance review
+INV-2025-011,Slack,2400.00,Communication Tools,IT,2025-02-01,Approved,Manager,Pro plan — annual
+INV-2025-012,Starbucks Corp,156.00,Office Supplies,HR,2025-02-03,Approved,Auto,Employee appreciation event
+INV-2025-013,GitHub,1500.00,Development Tools,Engineering,2025-02-05,Approved,Manager,Copilot Enterprise — 30 seats
+INV-2025-014,Hotel Grand NYC,4200.00,Travel,Sales,2025-02-08,Pending Manager,Manager,Sales conference accommodation — 3 nights
+INV-2025-015,Netsuite,18000.00,ERP Software,Finance,2025-02-10,Approved,CFO,Annual ERP maintenance and support

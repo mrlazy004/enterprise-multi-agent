@@ -1,0 +1,136 @@
+name: Enterprise AI — CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  ACR_REGISTRY: ${{ secrets.ACR_REGISTRY }}        # e.g. myacr.azurecr.io
+  RESOURCE_GROUP: enterprise-ai-rg
+  AZURE_LOCATION: eastus
+
+jobs:
+  # ── Test ────────────────────────────────────────────────────────────────────
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Lint
+        run: ruff check backend/ tests/
+
+      - name: Type check
+        run: mypy backend/ --ignore-missing-imports
+
+      - name: Unit tests
+        run: pytest tests/unit -v --tb=short
+        env:
+          AZURE_OPENAI_API_KEY: "mock"
+          AZURE_OPENAI_ENDPOINT: "https://mock.openai.azure.com"
+          AZURE_SEARCH_ENDPOINT: "https://mock.search.windows.net"
+          AZURE_SEARCH_API_KEY: "mock"
+
+  # ── Build & Push images ─────────────────────────────────────────────────────
+  build:
+    name: Build Docker images
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    outputs:
+      image_tag: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: ACR login
+        run: az acr login --name ${{ env.ACR_REGISTRY }}
+
+      - name: Set image tag
+        id: meta
+        run: echo "version=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Build & push API image
+        run: |
+          docker build -f infrastructure/docker/Dockerfile.api \
+            -t $ACR_REGISTRY/enterprise-ai-api:${{ steps.meta.outputs.version }} \
+            -t $ACR_REGISTRY/enterprise-ai-api:latest .
+          docker push $ACR_REGISTRY/enterprise-ai-api:${{ steps.meta.outputs.version }}
+          docker push $ACR_REGISTRY/enterprise-ai-api:latest
+
+      - name: Build & push Frontend image
+        run: |
+          docker build -f infrastructure/docker/Dockerfile.frontend \
+            -t $ACR_REGISTRY/enterprise-ai-frontend:${{ steps.meta.outputs.version }} \
+            -t $ACR_REGISTRY/enterprise-ai-frontend:latest .
+          docker push $ACR_REGISTRY/enterprise-ai-frontend:${{ steps.meta.outputs.version }}
+          docker push $ACR_REGISTRY/enterprise-ai-frontend:latest
+
+  # ── Deploy infrastructure ───────────────────────────────────────────────────
+  deploy-infra:
+    name: Deploy Azure infrastructure
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Bicep
+        uses: azure/arm-deploy@v2
+        with:
+          resourceGroupName: ${{ env.RESOURCE_GROUP }}
+          template: infrastructure/azure/main.bicep
+          parameters: environment=prod
+          failOnStdErr: false
+
+  # ── Deploy container apps ───────────────────────────────────────────────────
+  deploy-apps:
+    name: Deploy container apps
+    needs: [build, deploy-infra]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Update API container app
+        run: |
+          az containerapp update \
+            --name entai-prod-api \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --image $ACR_REGISTRY/enterprise-ai-api:${{ needs.build.outputs.image_tag }}
+
+      - name: Update Frontend container app
+        run: |
+          az containerapp update \
+            --name entai-prod-frontend \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --image $ACR_REGISTRY/enterprise-ai-frontend:${{ needs.build.outputs.image_tag }}
+
+      - name: Health check
+        run: |
+          sleep 30
+          API_URL=$(az containerapp show \
+            --name entai-prod-api \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --query properties.configuration.ingress.fqdn -o tsv)
+          curl -f "https://$API_URL/api/health" || exit 1
+          echo "Deployment successful: https://$API_URL"

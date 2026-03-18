@@ -1,0 +1,16 @@
+Ticket ID,Title,Category,Priority,Reporter,Department,Status,Assignee,Created Date,Resolved Date,Resolution Notes
+TKT-10001,VPN not connecting from home office,IT,High,EMP042,Engineering,Resolved,IT Team,2025-01-06,2025-01-06,Reinstalled VPN client and updated certificates. Issue resolved.
+TKT-10002,Outlook calendar not syncing with mobile,IT,Medium,EMP018,Sales,Resolved,IT Team,2025-01-07,2025-01-08,Re-authenticated Exchange account on iOS. Enabled background refresh.
+TKT-10003,New laptop setup request — onboarding,IT,High,EMP067,Engineering,Resolved,IT Team,2025-01-08,2025-01-09,MacBook Pro 16 provisioned with standard engineering toolkit. FileVault enabled.
+TKT-10004,Printer on Floor 3 offline,Facilities,Low,EMP023,Finance,Resolved,Facilities,2025-01-10,2025-01-10,Paper jam cleared. Printer back online.
+TKT-10005,Software access request — Figma Enterprise,IT,Medium,EMP031,Design,Approved,IT Team,2025-01-12,2025-01-13,Figma Enterprise seat assigned. User added to Design workspace.
+TKT-10006,Suspected phishing email received,Security,Critical,EMP055,HR,Resolved,Security Team,2025-01-14,2025-01-14,Email quarantined. Sender domain blocked. No credentials compromised. User trained.
+TKT-10007,Conference room AV system malfunction,Facilities,Medium,EMP009,Executive,In Progress,Facilities,2025-01-15,,HDMI matrix switch requires replacement. ETA 3 business days.
+TKT-10008,Slow internet connection — 4th floor,IT,Medium,EMP047,Sales,Resolved,IT Team,2025-01-16,2025-01-17,Network switch firmware updated. Speed confirmed at 850Mbps post-fix.
+TKT-10009,Database connection timeout — production,IT,Critical,EMP033,Engineering,Resolved,DevOps,2025-01-17,2025-01-17,Connection pool exhausted. Increased max_connections from 100 to 200. Deployed hotfix.
+TKT-10010,Password reset — locked account,IT,High,EMP061,Operations,Resolved,IT Team,2025-01-18,2025-01-18,Account unlocked and temporary password issued. MFA re-enrolled.
+TKT-10011,Standing desk height adjustment mechanism broken,Facilities,Low,EMP025,Engineering,Open,Facilities,2025-01-20,,Replacement part ordered. ETA 1 week.
+TKT-10012,GitHub access not provisioned after role change,IT,High,EMP039,Engineering,Resolved,IT Team,2025-01-21,2025-01-21,LDAP group membership updated. GitHub org access granted.
+TKT-10013,Zoom audio choppy during large meetings,IT,Medium,EMP012,Sales,Resolved,IT Team,2025-01-22,2025-01-23,Bandwidth QoS configured on user's switch port. Issue resolved.
+TKT-10014,Office badge not working — new hire,Facilities,High,EMP071,HR,Resolved,Facilities,2025-01-23,2025-01-23,Badge system sync issue. Card re-programmed and all access levels restored.
+TKT-10015,Request to install Adobe Creative Cloud,IT,Low,EMP028,Marketing,Approved,IT Team,2025-01-25,2025-01-26,License procured and installed. Serial number documented in asset register.
