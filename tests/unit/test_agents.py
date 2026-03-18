@@ -42,7 +42,7 @@ class TestHRAgentRisk:
                 self.agent._tools = []
 
     def test_high_risk_termination(self):
-        score, action = self.agent._assess_risk("terminate employee EMP001", "")
+        score, action = self.agent._assess_risk("termination of employee EMP001", "")
         assert score >= 0.85
         assert "termination" in action or "terminate" in action
 
